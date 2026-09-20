@@ -6,6 +6,9 @@ import { AppService } from './app.service';
 import { EmployeesModule } from './employees/employees.module';
 import { ProductsModule } from './products/products.module';
 import { ConfigModule  } from '@nestjs/config';
+import { ManagersModule } from './managers/managers.module';
+import { LocationsModule } from './locations/locations.module';
+import { RegionsModule } from './regions/regions.module';
 
 
 
@@ -39,6 +42,9 @@ export const { ObserveModule, ObserveInstrument } = createObserveModule();
     }),
     EmployeesModule,
     ProductsModule,
+    ManagersModule,
+    LocationsModule,
+    RegionsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
