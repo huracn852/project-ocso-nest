@@ -31,6 +31,7 @@ export class ProductsService {
   }
 
   findByProvider(id: string) {
+    return "OK";
    
   }
 

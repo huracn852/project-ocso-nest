@@ -8,6 +8,6 @@ locationId: number;
 locationName: string;
 @Column('text')
 locationAddress: string;
-@Column('array')
+@Column('double precision', { array: true })
 locationLatLng: number[];
 }
