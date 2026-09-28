@@ -10,6 +10,7 @@ import { ManagersModule } from './managers/managers.module';
 import { LocationsModule } from './locations/locations.module';
 import { RegionsModule } from './regions/regions.module';
 import { ProvidersModule } from './providers/providers.module';
+import { AuthModule } from './auth/auth.module';
 
 export const { ObserveModule, ObserveInstrument } = createObserveModule();
 
@@ -45,6 +46,7 @@ export const { ObserveModule, ObserveInstrument } = createObserveModule();
     LocationsModule,
     RegionsModule,
     ProvidersModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
