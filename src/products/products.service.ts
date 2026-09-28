@@ -31,7 +31,7 @@ export class ProductsService {
   }
 
   findByProvider(id: string) {
-    return "OK";
+    return this.productRepository.findBy({provider: {providerId: id}});
    
   }
 
