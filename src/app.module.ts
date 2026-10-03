@@ -11,24 +11,28 @@ import { LocationsModule } from './locations/locations.module';
 import { RegionsModule } from './regions/regions.module';
 import { ProvidersModule } from './providers/providers.module';
 import { AuthModule } from './auth/auth.module';
+import { JwtModule } from '@nestjs/jwt';
+import { JWT_KEY, JWT_EXPIRATION } from './auth/constants/jwt.constants';
+
 
 export const { ObserveModule, ObserveInstrument } = createObserveModule();
 
 @Module({
   imports: [
-    // 1. Cargar variables de entorno globalmente (una sola vez)
+
+    
     ConfigModule.forRoot({
       isGlobal: true,
     }),
 
-    // 2. Telemetría de Observe
+   
     ObserveModule.forRoot({
       appKey: 'YOUR_APP_KEY',
       appSecret: 'YOUR_APP_SECRET',
       serviceId: 'ocso-project',
     }),
 
-    // 3. Conexión a la base de datos PostgreSQL
+    
     TypeOrmModule.forRoot({
   type: 'postgres',
   host: process.env.DB_HOST ?? 'localhost',
