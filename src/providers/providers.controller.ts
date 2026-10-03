@@ -2,11 +2,8 @@ import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@n
 import { ProvidersService } from './providers.service';
 import { CreateProviderDto } from './dto/create-provider.dto';
 import { UpdateProviderDto } from './dto/update-provider.dto';
-import { AuthGuard } from '../auth/guards/auth.guard';
-import { Roles } from '../auth/decorators/roles.decorator';
-import { RolesGuard } from '../auth/guards/roles.guard';
+import { Auth } from '../auth/decorators/auth.decorators';
 
-@UseGuards(AuthGuard)
 @Controller('providers')
 export class ProvidersController {
   constructor(private readonly providersService: ProvidersService) {}
@@ -16,8 +13,7 @@ export class ProvidersController {
     return this.providersService.create(createProviderDto);
   }
 
-  @Roles(["Admin"])
-  @UseGuards(RolesGuard)
+  @Auth("Admin")
   @Get()
   findAll() {
     return this.providersService.findAll();
