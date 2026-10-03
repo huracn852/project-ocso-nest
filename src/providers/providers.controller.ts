@@ -1,12 +1,12 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, UnauthorizedException } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
 import { ProvidersService } from './providers.service';
 import { CreateProviderDto } from './dto/create-provider.dto';
 import { UpdateProviderDto } from './dto/update-provider.dto';
 import { AuthGuard } from '../auth/guards/auth.guard';
-import { UseGuards } from '@nestjs/common';
-import { UserData } from '../auth/decorators/user.decorators';
-import { User } from '../auth/entities/user.entity';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { RolesGuard } from '../auth/guards/roles.guard';
 
+@UseGuards(AuthGuard)
 @Controller('providers')
 export class ProvidersController {
   constructor(private readonly providersService: ProvidersService) {}
@@ -16,12 +16,10 @@ export class ProvidersController {
     return this.providersService.create(createProviderDto);
   }
 
-  @UseGuards(AuthGuard)
+  @Roles(["Admin"])
+  @UseGuards(RolesGuard)
   @Get()
-  findAll(@UserData() user: User) {
-    if (!user.userRoles.includes('Employee')) {
-      throw new UnauthorizedException('No estás autorizado');
-    }
+  findAll() {
     return this.providersService.findAll();
   }
 
