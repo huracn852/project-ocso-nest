@@ -4,6 +4,9 @@ import { CreateProviderDto } from './dto/create-provider.dto';
 import { UpdateProviderDto } from './dto/update-provider.dto';
 import { Auth } from '../auth/decorators/auth.decorators';
 import { ROLES } from '../auth/constants/roles.constants';
+import { ApiAuth } from '../auth/decorators/apidecorator';
+
+@ApiAuth()
 
 @Controller('providers')
 export class ProvidersController {

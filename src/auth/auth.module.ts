@@ -5,6 +5,8 @@ import { User } from './entities/user.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
 import { JWT_EXPIRATION, JWT_KEY } from './constants/jwt.constants';
+import { AuthGuard } from './guards/auth.guard';
+import { RolesGuard } from './guards/roles.guard';
 
 @Module({
   imports: [
@@ -12,9 +14,10 @@ import { JWT_EXPIRATION, JWT_KEY } from './constants/jwt.constants';
     JwtModule.register({
       secret: JWT_KEY,
       signOptions: { expiresIn: JWT_EXPIRATION },
-      }),
-    ],
+    }),
+  ],
   controllers: [AuthController],
-  providers: [AuthService],
+  providers: [AuthService, AuthGuard, RolesGuard],
+  exports: [AuthGuard, RolesGuard, JwtModule],
 })
 export class AuthModule {}

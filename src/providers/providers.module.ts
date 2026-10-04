@@ -1,18 +1,15 @@
 import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { ProvidersService } from './providers.service';
 import { ProvidersController } from './providers.controller';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { Provider } from './entities/provider.entity';
-import { JWT_EXPIRATION } from '../auth/constants/jwt.constants';
-import { JWT_KEY } from '../auth/constants/jwt.constants';
-import { JwtModule } from '@nestjs/jwt';
-
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Provider]), JwtModule.register({
-    secret: JWT_KEY,
-    signOptions: { expiresIn: JWT_EXPIRATION },
-  })],
+  imports: [
+    TypeOrmModule.forFeature([Provider]),
+    AuthModule,
+  ],
   controllers: [ProvidersController],
   providers: [ProvidersService],
   exports: [ProvidersService, TypeOrmModule],

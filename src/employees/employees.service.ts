@@ -1,7 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateEmployeeDto } from './dto/create-employee.dto';
 import { UpdateEmployeeDto } from './dto/update-employee.dto';
-import {v4 as uuid} from 'uuid';
 import { Employee } from './entities/employee.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -10,26 +9,65 @@ import { InjectRepository } from '@nestjs/typeorm';
 export class EmployeesService {
   constructor(
     @InjectRepository(Employee)
-    private employeeRepository: Repository<Employee>
-  ){}
+    private employeeRepository: Repository<Employee>,
+  ) {}
+
   async create(createEmployeeDto: CreateEmployeeDto) {
-    const employee = await this.employeeRepository.save(createEmployeeDto);
-    return employee;
- 
+    const { location, ...employeeData } = createEmployeeDto;
+
+    const employee = this.employeeRepository.create({
+      ...employeeData,
+      ...(location && {
+        location: {
+          locationId: location.locationId,
+        },
+      }),
+    } as any);
+
+    return this.employeeRepository.save(employee);
   }
 
   findAll() {
-    return this.employeeRepository.find();
+    return this.employeeRepository.find({
+      relations: {
+        location: true,
+      },
+    });
+  }
+
+  findAllLocation(id: number) {
+    return this.employeeRepository.find({
+      where: {
+        location: {
+          locationId: id,
+        },
+      },
+      relations: {
+        location: true,
+      },
+    });
   }
 
   findOne(id: string) {
-    const employee = this.employeeRepository.findOneBy({employeeId: id});
-    return employee;
+    return this.employeeRepository.findOne({
+      where: { employeeId: id },
+      relations: {
+        location: true,
+      },
+    });
   }
 
   async update(id: string, updateEmployeeDto: UpdateEmployeeDto) {
+    const { location: employeeLocation, ...employeeData } = updateEmployeeDto;
+
     const employeeToUpdate = await this.employeeRepository.preload({
-      employeeId: id, ...updateEmployeeDto
+      employeeId: id,
+      ...employeeData,
+      ...(employeeLocation && {
+        location: {
+          locationId: employeeLocation.locationId,
+        },
+      }),
     });
 
     if (!employeeToUpdate) {
@@ -39,9 +77,8 @@ export class EmployeesService {
     return this.employeeRepository.save(employeeToUpdate);
   }
 
-  remove(id: string) {
-    this.employeeRepository.delete({employeeId: id});
-    return {message: `Empleado eliminado correctamente`};
+  async remove(id: string) {
+    await this.employeeRepository.delete({ employeeId: id });
+    return { message: 'Empleado eliminado correctamente' };
   }
 }
-
