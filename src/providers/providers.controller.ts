@@ -5,8 +5,10 @@ import { UpdateProviderDto } from './dto/update-provider.dto';
 import { Auth } from '../auth/decorators/auth.decorators';
 import { ROLES } from '../auth/constants/roles.constants';
 import { ApiAuth } from '../auth/decorators/apidecorator';
+import { ApiTags } from '@nestjs/swagger';
 
 @ApiAuth()
+@ApiTags('Providers')
 
 @Controller('providers')
 export class ProvidersController {

@@ -5,8 +5,10 @@ import { UpdateLocationDto } from './dto/update-location.dto';
 import { Auth } from '../auth/decorators/auth.decorators';
 import { ROLES } from '../auth/constants/roles.constants';
 import { ApiAuth } from '../auth/decorators/apidecorator';
+import { ApiTags } from '@nestjs/swagger';
 
 @ApiAuth()
+@ApiTags('Locations')
 
 @Controller('locations')
 export class LocationsController {

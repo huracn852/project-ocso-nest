@@ -5,8 +5,10 @@ import { UpdateRegionDto } from './dto/update-region.dto';
 import { Auth } from '../auth/decorators/auth.decorators';
 import { ROLES } from '../auth/constants/roles.constants';
 import { ApiAuth } from '../auth/decorators/apidecorator';
+import { ApiTags } from '@nestjs/swagger';
 
 @ApiAuth()
+@ApiTags('Regions')
 
 @Controller('regions')
 export class RegionsController {
