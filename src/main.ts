@@ -5,7 +5,9 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
-    instrument: ObserveInstrument,
+    cors: {
+      origin: process.env.ALLOWEDORIGIN 
+    }
   });
     const config = new DocumentBuilder()
     .setTitle('Ocso API')
@@ -16,6 +18,6 @@ async function bootstrap() {
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, documentFactory);
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true, transform: true }));
-  await app.listen(Number(process.env.APP_PORT ?? 3000));
+  await app.listen(Number(process.env.APP_PORT ?? 4000));
 }
 bootstrap();
