@@ -31,6 +31,21 @@
 $ npm install
 ```
 
+## Authentication configuration
+
+Set `JWT_SECRET` in `.env` to a long, random value before starting the application.
+For example, generate one with:
+
+```bash
+node -e "console.log(require('node:crypto').randomBytes(64).toString('hex'))"
+```
+
+The login cookie lasts seven days, matching the JWT expiration. In development it
+uses `SameSite=Lax` without `Secure` for local HTTP; in production it uses
+`SameSite=None` and `Secure`, so the application must be served over HTTPS.
+The frontend must send credentialed requests to the API for the browser to store
+and send the cookie.
+
 ## Compile and run the project
 
 ```bash

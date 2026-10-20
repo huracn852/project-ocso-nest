@@ -9,8 +9,6 @@ import { LocationsModule } from './locations/locations.module';
 import { RegionsModule } from './regions/regions.module';
 import { ProvidersModule } from './providers/providers.module';
 import { AuthModule } from './auth/auth.module';
-import { JwtModule } from '@nestjs/jwt';
-import { JWT_KEY, JWT_EXPIRATION } from './auth/constants/jwt.constants';
 
 
 export const { ObserveModule, ObserveInstrument } = createObserveModule();
@@ -21,6 +19,7 @@ export const { ObserveModule, ObserveInstrument } = createObserveModule();
     
     ConfigModule.forRoot({
       isGlobal: true,
+      envFilePath: '.env',
     }),
 
    
