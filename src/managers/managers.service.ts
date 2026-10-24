@@ -9,38 +9,59 @@ import { InjectRepository } from '@nestjs/typeorm';
 export class ManagersService {
   constructor(
     @InjectRepository(Manager)
-    private managerRepository: Repository<Manager>
+    private readonly managerRepository: Repository<Manager>,
   ) {}
+
   create(createManagerDto: CreateManagerDto) {
-    return this.managerRepository.save(createManagerDto);
-  
+    const { location, ...managerData } = createManagerDto;
+
+    const manager = this.managerRepository.create({
+      ...managerData,
+      ...(location && { location: { locationId: location.locationId } }),
+    });
+
+    return this.managerRepository.save(manager);
   }
 
   findAll() {
-    return `This action returns all managers`;
+    return this.managerRepository.find({
+      relations: { location: true },
+    });
   }
 
-  findOne(id: string) {
-    const manager = this.managerRepository.findOneBy({ managerId: id });
+  async findOne(id: string) {
+    const manager = await this.managerRepository.findOne({
+      where: { managerId: id },
+      relations: { location: true },
+    });
+
     if (!manager) {
-      throw new NotFoundException(`Manager not found`);
+      throw new NotFoundException('Manager not found');
     }
+
+    return manager;
   }
 
   async update(id: string, updateManagerDto: UpdateManagerDto) {
+    const { location, ...managerData } = updateManagerDto;
     const managerToUpdate = await this.managerRepository.preload({
       managerId: id,
-      ...updateManagerDto
-    })
+      ...managerData,
+      ...(location && { location: { locationId: location.locationId } }),
+    });
+
     if (!managerToUpdate) {
-      throw new NotFoundException(`Manager not found`);
-  }
-  return await this.managerRepository.save(managerToUpdate);
+      throw new NotFoundException('Manager not found');
+    }
+
+    return this.managerRepository.save(managerToUpdate);
   }
 
-  remove(id: string) {
+  async remove(id: string) {
+    await this.findOne(id);
+
     return this.managerRepository.delete({
-      managerId: id
-    })
+      managerId: id,
+    });
   }
 }

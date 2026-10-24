@@ -6,7 +6,7 @@ import { LoginUserDto } from './dto/login.user.dto';
 import { ApiTags } from '@nestjs/swagger';
 import type { Response } from 'express';
 import {
-  JWT_COOKIE_MAX_AGE,
+  
   TOKEN_NAME,
 } from './constants/jwt.constants';
 
@@ -33,7 +33,7 @@ export class AuthController {
       httpOnly: true,
       sameSite: isProduction ? 'none' : 'lax',
       secure: isProduction,
-      maxAge: JWT_COOKIE_MAX_AGE,
+      maxAge: 1000 * 60 * 60 * 24 * 7,
     });
     return { message: 'Login successful' };
   }

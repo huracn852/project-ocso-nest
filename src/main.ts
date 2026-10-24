@@ -8,9 +8,12 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     instrument: ObserveInstrument,
     cors: {
-      origin: process.env.ALLOWEDORIGIN,
-       credentials: true,
-
+      origin: [
+        process.env.ALLOWEDORIGIN ?? 'http://127.0.0.1:3000',
+        'http://localhost:3000',
+        'http://127.0.0.1:3000',
+      ],
+      credentials: true,
     }
   });
   app.use(cookieParser());

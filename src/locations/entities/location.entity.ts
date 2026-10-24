@@ -8,41 +8,40 @@ import { ApiProperty } from "@nestjs/swagger";
 @Entity()
 export class Location {
 
-@PrimaryGeneratedColumn('increment')
-locationId: number;
+    @PrimaryGeneratedColumn('increment')
+    locationId: number;
 
-@ApiProperty({
-    default: "Ocso juriquilla"
-})
-@Column('text')
-locationName: string;
+    @ApiProperty({
+        default: "Ocso juriquilla"
+    })
+    @Column('text')
+    locationName: string;
 
-@ApiProperty({
-    default: "Calle 1, Juriquilla, Qro"
-})
-@Column('text')
-locationAddress: string;
+    @ApiProperty({
+        default: "Calle 1, Juriquilla, Qro"
+    })
+    @Column('text')
+    locationAddress: string;
 
-@ApiProperty({
-    default: [20.123456, -100.123456]
-})
-@Column('simple-array')
-locationLatLng: number[];
+    @ApiProperty({
+        default: [20.123456, -100.123456]
+    })
+    @Column('simple-array')
+    locationLatLng: number[];
 
-@OneToOne(() => Manager, {
-    eager: true
-})
-@JoinColumn({
-    name: 'managerId',
-})
-manager: Manager;
+    @ApiProperty({ default: "8r5fv-8rfd5s-9w6s-7t4v1" })
+    @OneToOne(() => Manager, (manager) => manager.location, {
+        eager: true,
+        nullable: true,
+    })
+    manager: Manager | string;
 
-@ManyToOne(() => Region, (region) => region.locations)
-@JoinColumn({
-    name: 'regionId',
-})
-region: Region;
+    @ManyToOne(() => Region, (region) => region.locations)
+    @JoinColumn({
+        name: 'regionId',
+    })
+    region: Region;
 
-@OneToMany(() => Employee, (employee) => employee.location)
-employees: Employee[];
+    @OneToMany(() => Employee, (employee) => employee.location)
+    employees: Employee[];
 }
